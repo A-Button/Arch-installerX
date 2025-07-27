@@ -107,7 +107,7 @@ class FunctionalModules(BasicAbility):
 
     @staticmethod
     def welcome():
-        print("Welcome to Arch install bro mama!")
+        print("Welcome to Arch Linux InstallerX !")
         print("You need to hava a Internet connection to use this script or you hava a locale host to get packages.")
 
     @staticmethod
