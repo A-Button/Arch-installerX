@@ -52,12 +52,12 @@ class BasicAbility:
         logfile.write(message_prewrite)
         return message_prewrite
 
-    # Choose a option
+    # Choose an option
     @staticmethod
     def choose_or_quit(start,end,message,function_list):
         choice = input(message)
-        templist=[str(i) for i in range(start, end+1)].append('q')
-        if choice in templist:
+        temp_list=[str(i) for i in range(start, end+1)].append('q')
+        if choice in temp_list:
             if choice == 'q':
                 BasicAbility.write_log("User quit", 1)
                 quit()

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/archinstallbromama.iml" filepath="$PROJECT_DIR$/.idea/archinstallbromama.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/arch-installerX.iml" filepath="$PROJECT_DIR$/.idea/arch-installerX.iml" />
     </modules>
   </component>
 </project>
