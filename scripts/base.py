@@ -6,19 +6,26 @@ MAKE OPEN SOURCE GREAT AGAIN !!!!!!
 """
 
 import os, time, json
+import logging
 
-logfile = open(str(int(time.time())) + ".log", 'w')
+# Configure logging
+log_filename = str(int(time.time())) + ".log"
+logging.basicConfig(
+    filename=log_filename,
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
 
 
 ### functions
 
-## Basic_ability
+# Basic ability
 class BasicAbility:
 
     # Execute commands
     @staticmethod
     def execute(command, is_have_result=1):
-        BasicAbility.write_log("Executed " + command)
+        logging.info("Executed " + command)
         if is_have_result:
             return os.popen(command).readlines()
         else:
@@ -28,29 +35,15 @@ class BasicAbility:
     @staticmethod
     def yn_to_bools(text):
         if text == 'y':
-            BasicAbility.write_log("Chose y")
+            logging.info("Chose y")
             return True
         elif text == 'n':
-            BasicAbility.write_log("Chose n")
+            logging.info("Chose n")
             return False
         else:
-            BasicAbility.write_log("Invalid input", 1)
+            logging.info("Invalid input", 1)
             print('[WARNING]:Invalid input')
             return None
-
-    # Write log
-    @staticmethod
-    def write_log(message, level=2):
-        if level == 0:
-            message_prewrite = "[ERROR] " + str(time.time) + ' ' + message
-        elif level == 1:
-            message_prewrite = "[WARNING] " + str(time.time) + ' ' + message
-        elif level == 2:
-            message_prewrite = "[INFO] " + str(time.time) + ' ' + message
-        else:
-            message_prewrite = "unknow action"
-        logfile.write(message_prewrite)
-        return message_prewrite
 
     # Choose an option
     @staticmethod
@@ -59,13 +52,13 @@ class BasicAbility:
         temp_list=[str(i) for i in range(start, end+1)].append('q')
         if choice in temp_list:
             if choice == 'q':
-                BasicAbility.write_log("User quit", 1)
+                logging.warning("User quit")
                 quit()
             else:
-                BasicAbility.write_log("User choose " + choice)
+                logging.info("User choose " + choice)
                 return function_list[int(choice) - 1]()
         else:
-            BasicAbility.write_log("Invalid input", 1)
+            logging.warning("Invalid input")
             print('[WARNING]:Invalid input')
             return BasicAbility.choose_or_quit(start, end, message, function_list)
 
@@ -89,19 +82,19 @@ class FunctionalModules(BasicAbility):
         Choose a mirror(123dq or a url for a new mirror):''')
         if m in "123":
             chosen_mirror = mirrors[int(m) - 1]
-            BasicAbility.write_log("Choose mirror " + chosen_mirror)
+            logging.info("Choose mirror " + chosen_mirror)
             return chosen_mirror
         elif "http" in m:
-            BasicAbility.write_log("Choose mirror " + m)
+            logging.info("Choose mirror " + m)
             return m
         elif m == "d":
-            BasicAbility.write_log("Did not choose any mirror")
+            logging.info("Did not choose any mirror")
             return False
         elif m == "q":
-            BasicAbility.write_log("User quit", 1)
+            logging.warning("User quit")
             quit()
         else:
-            BasicAbility.write_log("Invalid input", 1)
+            logging.warning("Invalid input")
             print('[WARNING]:Invalid input')
             return self.choose_mirror()
 
@@ -152,18 +145,16 @@ class Main(BasicAbility, FunctionalModules, InitFunctions):
         elif t == '3':
             super().quick_start()
         elif t == 'q':
-            BasicAbility.write_log("Quit", 1)
+            logging.warning("Quit")
             quit()
         else:
-            BasicAbility.write_log("Invalid input in Main.main", 1)
+            logging.error("Invalid input in Main.main")
             print('[ERROR]:Invalid input')
             self.main()
 
         # Tips
         print("Tips: You can directly use Enter to us default value")
-        BasicAbility.write_log("Exit Main.main")
+        logging.info("Exit Main.main")
 
 
 ############################################################################################
-
-logfile.close()
