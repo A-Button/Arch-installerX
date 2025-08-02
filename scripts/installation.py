@@ -20,8 +20,8 @@ class Arch_installer:
         fs_list = ["btrfs", "xfs", "ext4"]
         for item in fs_list:
             print(item)
-        filesystem_type = input("Input the filesystem type you want: ")
-        if filesystem_type == "btrfs":
+        self.filesystem_type = input("Input the filesystem type you want: ")
+        if self.filesystem_type == "btrfs":
             self.system_packages.append("btrfs-progs")
             # ask user whether pass arguments or not
             label = input(
@@ -31,12 +31,32 @@ class Arch_installer:
                 os.system(f"mkfs.btrfs {self.root_partition}")
             else:
                 os.system(f"mkfs.btrfs -L {label} {self.root_partition}")
-        elif filesystem_type == "xfs":
+        elif self.filesystem_type == "xfs":
             self.system_packages.append("xfsprogs")
             # xfs is needing help to support user pass arguments while formatting it
             os.system(f"mkfs.xfs {self.root_partition}")
-        elif filesystem_type == "ext4":
+        elif self.filesystem_type == "ext4":
             os.system(f"mkfs.ext4 {self.root_partition}")
+
+    # For btrfs special
+    def btrfs_create_subvolume(self):
+        if self.filesystem_type == "btrfs":
+            # judge user if pass arguments
+            confirm_argument = input(
+                "Do you want to pass arguments while mounting? y/n "
+            )
+            if confirm_argument == "n":
+                os.system(f"""mount -t btrfs {self.root_partition} /mnt""")
+            elif confirm_argument == "y":
+                arguments = input("Please input your arguments: ")
+                os.system(
+                    f"""mount -t btrfs -o {arguments} {self.root_partition} /mnt"""
+                )
+            os.system("btrfs subvolume create /mnt/@")
+            os.system("btrfs subvolume create /mnt/@home")
+            os.system("umount /mnt")
+        else:
+            pass
 
     def change_mirror(self):
         mirros_list = {
