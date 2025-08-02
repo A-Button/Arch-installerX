@@ -37,10 +37,8 @@ class Arch_installer:
             mirror = mirros_list[mirror]
         elif mirror in mirros_list.keys():
             mirror = mirros_list[mirror]
-        # os.system('cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.back')
-        # with open('/etc/pacman.d/mirrorlist', 'w') as mirror_file:
-        os.system("cp /home/Spark/mirrorlist /home/Spark/mirrorlist.back")
-        with open("/home/Spark/mirrorlist", "w") as mirror_file:
+        os.system("cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.back")
+        with open("/etc/pacman.d/mirrorlist", "w") as mirror_file:
             mirror_file.write(mirror)
 
 
