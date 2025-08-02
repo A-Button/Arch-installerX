@@ -66,6 +66,18 @@ class Arch_installer:
         else:
             pass
 
+    def mount_partition(self):
+        # judge user if pass argument
+        confirm_argument = input("Do you want to pass your own argument? y/n ")
+        if confirm_argument == "y":
+            user_argument_for_root = input("Input your argument for root: ")
+            user_argument_for_home = input("Input your argument for home(subvol=/<home_subvolume_name>): ")
+            if self.filesysyem_type 
+            # mount root
+            os.system(f"mount -t btrfs -o {user_argument_for_root} {self.root_partition}
+            # mount home
+            os.system(f"mount -t btrfs -o {user_argument_for_home} {self.root_partition}
+
     def change_mirror(self):
         mirror_list = {
             "TsingHua": "Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch",
