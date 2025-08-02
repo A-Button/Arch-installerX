@@ -52,21 +52,29 @@ class Arch_installer:
                 os.system(
                     f"""mount -t btrfs -o {arguments} {self.root_partition} /mnt"""
                 )
-            os.system("btrfs subvolume create /mnt/@")
-            os.system("btrfs subvolume create /mnt/@home")
+            # judge user if set subvolume name
+            confirm_subvolume_name = input("Do you want to set your subvolume name? y/n ")
+            if confirm_subvolume_name == 'y':
+                subvolume_name_for_root = input("Input your subvolume name for *root* partition: ")
+                subvolume_name_for_home = input("Input your subvolume name for *home* partition: ")
+                os.system(f"btrfs subvolume create /mnt/{subvolume_name_for_root}")
+                os.system(f"btrfs subvolume create /mnt/{subvolume_name_for_home}")
+            else:
+                os.system("btrfs subvolume create /mnt/@")
+                os.system("btrfs subvolume create /mnt/@home")
             os.system("umount /mnt")
         else:
             pass
 
     def change_mirror(self):
-        mirros_list = {
+        mirror_list = {
             "TsingHua": "Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch",
             "USTC": "Server = https://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch",
             "LZU": "Server = https://mirrors.lzu.edu.cn/archlinux/$repo/os/$arch",
             "HuaWei_Cloud": "Server = https://mirrors.huaweicloud.com/archlinux/$repo/os/$arch",
             "Ali_Cloud": "Server = http://mirrors.aliyun.com/archlinux/$repo/os/$arch",
         }
-        for key in mirros_list.keys():
+        for key in mirror_list.keys():
             print(key)
         mirror = input(
             "Choose one mirror provider above(Name should be the SAME as printed, upcase), if you want to use other, please input `o`: "
@@ -76,16 +84,16 @@ class Arch_installer:
                 "The mirror url form is `Server = https://<mirror_domain>/archlinux/$repo/os/$arch`"
             )
             mirror = input("Now please input the mirror url: ")
-        elif mirror not in mirros_list.keys():
+        elif mirror not in mirror_list.keys():
             print(
                 "Please input the correct name(Name should be the SAME as printed, upcase)"
             )
             mirror = input(
                 "Choose one mirror provider above(Name should be the SAME as printed, upcase), if you want to use other, please input `o`: "
             )
-            mirror = mirros_list[mirror]
-        elif mirror in mirros_list.keys():
-            mirror = mirros_list[mirror]
+            mirror = mirror_list[mirror]
+        elif mirror in mirror_list.keys():
+            mirror = mirror_list[mirror]
         os.system("cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.back")
         with open("/etc/pacman.d/mirrorlist", "w") as mirror_file:
             mirror_file.write(mirror)
