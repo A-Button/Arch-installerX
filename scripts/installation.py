@@ -2,12 +2,41 @@ import os
 
 
 class Arch_installer:
-    def __init__(self, partitions, system_packages, optional_mount_partition) -> None:
+    def __init__(self, optional_mount_partition) -> None:
         # self.mirror = mirror
-        self.partitions = partitions
-        self.system_packages = system_packages
+        self.system_packages = []
         self.optional_mount_partition = optional_mount_partition
         pass
+
+    def ask_partition_name(self, boot_partition, root_partition, swap):
+        self.boot_partition = boot_partition
+        self.root_partition = root_partition
+        self.swap = swap
+
+    def format_partitions(self):
+        os.system(f"""mkfs.fat -F 32 {self.boot_partition}""")
+        os.system(f"""mkfs.swap {self.swap}""")
+        # ask user which type of popular filesystem to format
+        fs_list = ["btrfs", "xfs", "ext4"]
+        for item in fs_list:
+            print(item)
+        filesystem_type = input("Input the filesystem type you want: ")
+        if filesystem_type == "btrfs":
+            self.system_packages.append("btrfs-progs")
+            # ask user whether pass arguments or not
+            label = input(
+                "If you want to set a label, please input it(or you can input `q` to exit): "
+            )
+            if label == "q":
+                os.system(f"mkfs.btrfs {self.root_partition}")
+            else:
+                os.system(f"mkfs.btrfs -L {label} {self.root_partition}")
+        elif filesystem_type == "xfs":
+            self.system_packages.append("xfsprogs")
+            # xfs is needing help to support user pass arguments while formatting it
+            os.system(f"mkfs.xfs {self.root_partition}")
+        elif filesystem_type == "ext4":
+            os.system(f"mkfs.ext4 {self.root_partition}")
 
     def change_mirror(self):
         mirros_list = {
@@ -40,11 +69,17 @@ class Arch_installer:
         os.system("cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.back")
         with open("/etc/pacman.d/mirrorlist", "w") as mirror_file:
             mirror_file.write(mirror)
+        os.system("clear")
 
 
 installer = Arch_installer(
-    input("partitions"),
-    input("system_packages"),
+    # input("partitions"),
+    # input("system_packages"),
     input("optional_mount_partition"),
+)
+installer.ask_partition_name(
+    boot_partition=input("Input your boot partition:"),
+    root_partition=input("Input your root partition:"),
+    swap=input("Input your swap partition:"),
 )
 installer.change_mirror()
