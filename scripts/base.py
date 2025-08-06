@@ -13,15 +13,15 @@ log_filename = str(int(time.time())) + ".log"
 logging.basicConfig(
     filename=log_filename,
     level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
+    format="%(asctime)s - %(levelname)s - %(message)s",
 )
 
 
 ### functions
 
+
 # Basic ability
 class BasicAbility:
-
     # Execute commands
     @staticmethod
     def execute(command, is_have_result=1):
@@ -34,24 +34,24 @@ class BasicAbility:
     # Change y/n to bools
     @staticmethod
     def yn_to_bools(text):
-        if text == 'y':
+        if text == "y":
             logging.info("Chose y")
             return True
-        elif text == 'n':
+        elif text == "n":
             logging.info("Chose n")
             return False
         else:
             logging.info("Invalid input", 1)
-            print('[WARNING]:Invalid input')
+            print("[WARNING]:Invalid input")
             return None
 
     # Choose an option
     @staticmethod
-    def choose_or_quit(start,end,message,function_list):
+    def choose_or_quit(start, end, message, function_list):
         choice = input(message)
-        temp_list=[str(i) for i in range(start, end+1)].append('q')
+        temp_list = [str(i) for i in range(start, end + 1)].append("q")
         if choice in temp_list:
-            if choice == 'q':
+            if choice == "q":
                 logging.warning("User quit")
                 quit()
             else:
@@ -59,27 +59,27 @@ class BasicAbility:
                 return function_list[int(choice) - 1]()
         else:
             logging.warning("Invalid input")
-            print('[WARNING]:Invalid input')
+            print("[WARNING]:Invalid input")
             return BasicAbility.choose_or_quit(start, end, message, function_list)
 
 
 ############################################################################################
 
+
 ## Functional modules
 class FunctionalModules(BasicAbility):
-
     def choose_mirror(self):
         mirrors = [
             "https://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch",
             "https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch",
             "https://repo.huaweicloud.com/archlinux/$repo/os/$arch",
         ]
-        m = input('''Please choose a mirror or type a url for a new mirror or type d to do not make any changes
+        m = input("""Please choose a mirror or type a url for a new mirror or type d to do not make any changes
         (1) USTC Mirror
         (2) TUNA Mirror
         (3) HUAWEI Cloud
         (q) Quit
-        Choose a mirror(123dq or a url for a new mirror):''')
+        Choose a mirror(123dq or a url for a new mirror):""")
         if m in "123":
             chosen_mirror = mirrors[int(m) - 1]
             logging.info("Choose mirror " + chosen_mirror)
@@ -95,21 +95,26 @@ class FunctionalModules(BasicAbility):
             quit()
         else:
             logging.warning("Invalid input")
-            print('[WARNING]:Invalid input')
+            print("[WARNING]:Invalid input")
             return self.choose_mirror()
 
     @staticmethod
     def welcome():
         print("Welcome to Arch Linux InstallerX !")
-        print("You need to hava a Internet connection to use this script or you hava a locale host to get packages.")
+        print(
+            "You need to hava a Internet connection to use this script or you hava a locale host to get packages."
+        )
 
     @staticmethod
     def choose_mode():
         FunctionalModules.welcome()
-        return input('''(1)Basic (2)Import a json (3)QuickStart (q)Quit\nChoose a mode(123q):''')
+        return input(
+            """(1)Basic (2)Import a json (3)QuickStart (q)Quit\nChoose a mode(123q):"""
+        )
 
 
 ############################################################################################
+
 
 ## init funcs
 class InitFunctions:
@@ -138,18 +143,18 @@ class Main(BasicAbility, FunctionalModules, InitFunctions):
 
         # init
         t = super().choose_mode()
-        if t == '1':
+        if t == "1":
             super().basic_install()
-        elif t == '2':
+        elif t == "2":
             super().json_install()
-        elif t == '3':
+        elif t == "3":
             super().quick_start()
-        elif t == 'q':
+        elif t == "q":
             logging.warning("Quit")
             quit()
         else:
             logging.error("Invalid input in Main.main")
-            print('[ERROR]:Invalid input')
+            print("[ERROR]:Invalid input")
             self.main()
 
         # Tips
