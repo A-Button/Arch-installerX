@@ -1,3 +1,4 @@
+# NOTE: This script will be stopped upgrading because of my study
 # WARN: Some codes in this script SHOULD be improved!!!
 import os
 import json
