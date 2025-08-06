@@ -195,11 +195,14 @@ installer.ask_partition_name(
     root_partition=input("Input your root partition:"),
     swap=input("Input your swap partition:"),
 )
-# TODO
+installer.format_partitions()
+installer.btrfs_create_subvolume()
+installer.mount_system_partition()
 installer.change_mirror()
 installer.ask_packages_name_for_install()
 installer.install_packages()
 optional_mount_partition(input("Do you want to mount other partitions? y/n: "))
+installer.genarate_fstab()
 chroot()
 # NOTE: This wanted to store user's choses and print it let them confirm
 # json.dump()
