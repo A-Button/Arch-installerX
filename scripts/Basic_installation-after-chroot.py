@@ -7,9 +7,6 @@ class Arch_further_installer:
     def __init__(self) -> None:
         pass
 
-    def ask_partition_name(self, boot_partition):
-        self.boot_partition = boot_partition
-
     def change_mirror(self):
         mirror_list = {
             "TsingHua": "Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch",
@@ -65,7 +62,10 @@ class Arch_further_installer:
         # Update database
         os.system("pacman -Sy")
         # Install software
-        os.system("pacman -S archlinuxcn-keyring paru firefox hyprland fzf intel-ucode")
+        packages = input(
+            "Input your package name to install, CN repo and official repo ONLY, use `space` to split: "
+        )
+        os.system(f"pacman -S archlinuxcn-keyring {packages}")
 
     # Set hostname
     def set_hostname(self):
@@ -102,18 +102,37 @@ class Arch_further_installer:
     # Create normal user
     def create_normal_user(self):
         normal_user_name = input("Input your normal username:")
-        os.system(f"useradd -m -G wheel -s /usr/bin/zsh {normal_user_name}")
+        os.system("chsh -l")
+        shell = input("Input the path of shell for user use: ")
+        os.system(f"useradd -m -G wheel -s {shell} {normal_user_name}")
         os.system(f"passwd {normal_user_name}")
 
     # Bootloader
-    def install_grub(self):
-        os.system("pacman -S grub grub-btrfs efibootmgr")
-        os.system(
-            "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=ARCH"
+    def install_bootloader(self):
+        confirm = input(
+            "WARNING: use `grub` as default, if you want to use other bootloader, please input `o`: "
         )
-        print("There is something you need to visit: http://fars.ee/yGQq")
-        os.system("grub-mkconfig -o /boot/grub/grub.cfg")
+        if confirm == "o":
+            package = input("Input your bootloader package name: ")
+            os.system(f"pacman -S {package}")
+            print("Now you need to config it manually")
+        else:
+            os.system("pacman -S grub grub-btrfs efibootmgr")
+            os.system(
+                "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=ARCH"
+            )
+            print("There is something you need to visit: http://fars.ee/yGQq")
+            os.system("grub-mkconfig -o /boot/grub/grub.cfg")
 
 
 installer = Arch_further_installer()
 installer.add_repo()
+installer.change_mirror()
+installer.sync_data()
+installer.genarate_locale()
+installer.set_host()
+installer.set_hostname()
+installer.set_root_passwd()
+installer.set_time()
+installer.create_normal_user()
+installer.install_bootloader()
