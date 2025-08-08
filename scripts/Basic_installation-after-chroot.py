@@ -65,7 +65,7 @@ class Arch_further_installer:
         packages = input(
             "Input your package name to install, CN repo and official repo ONLY, use `space` to split: "
         )
-        os.system(f"pacman -S archlinuxcn-keyring {packages}")
+        os.system(f"pacman -S archlinuxcn-keyring archlinux-keyring {packages}")
 
     # Set hostname
     def set_hostname(self):
