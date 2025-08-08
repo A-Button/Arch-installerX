@@ -12,6 +12,7 @@ class Arch_installer:
             "base-devel",
             "linux-firmware",
             "networkmanager",
+            "python",
         ]
         pass
 
@@ -158,8 +159,8 @@ class Arch_installer:
                 self.system_packages.append(packages_user_install)
 
     def install_packages(self):
-        for item in self.system_packages:
-            os.system(f"pacstrap /mnt {item}")
+        packages_name = " ".join(self.system_packages)
+        os.system(f"pacstrap -K /mnt {packages_name}")
 
     def genarate_fstab(self):
         os.system("genfstab -U /mnt > /mnt/etc/fstab")
@@ -190,6 +191,7 @@ def chroot():
 
 
 installer = Arch_installer()
+os.system("lsblk")
 installer.ask_partition_name(
     boot_partition=input("Input your boot partition:"),
     root_partition=input("Input your root partition:"),
@@ -204,5 +206,5 @@ installer.install_packages()
 optional_mount_partition(input("Do you want to mount other partitions? y/n: "))
 installer.genarate_fstab()
 chroot()
-# NOTE: This wanted to store user's choses and print it let them confirm
+# NOTE: This wanted to store user's choses and print it for confirming
 # json.dump()
