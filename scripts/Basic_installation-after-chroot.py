@@ -115,7 +115,7 @@ class Arch_further_installer:
         if confirm == "o":
             package = input("Input your bootloader package name: ")
             os.system(f"pacman -S {package}")
-            print("Now you need to config it manually")
+            print("Now you need to configure it manually")
         else:
             os.system("pacman -S grub grub-btrfs efibootmgr")
             os.system(
