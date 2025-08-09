@@ -153,6 +153,26 @@ class Arch_further_installer:
         else:
             os.system(f"pacman -S {de_list[de]}")
 
+    def install_wm(self):
+        wm_list = {
+            "dwm": "dwm",
+            "i3": "i3",
+            "bspwm": "bspwm",
+            "hyprland": "hyprland",
+            "sway": "sway",
+        }
+        for item in wm_list.keys():
+            print(item)
+        while 1 == 1:
+            wm = input("Please input your wm, the name should be the SAME of printed: ")
+            if wm in wm_list.keys():
+                os.system(f"pacman -S {wm_list[wm]}")
+                break
+            else:
+                wm = input(
+                    "Please input your wm, the name should be the SAME of printed: "
+                )
+
 
 installer = Arch_further_installer()
 installer.add_repo()
