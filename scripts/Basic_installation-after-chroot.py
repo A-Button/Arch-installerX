@@ -163,7 +163,7 @@ class Arch_further_installer:
         }
         for item in wm_list.keys():
             print(item)
-        while 1 == 1:
+        while True:
             wm = input("Please input your wm, the name should be the SAME of printed: ")
             if wm in wm_list.keys():
                 os.system(f"pacman -S {wm_list[wm]}")
