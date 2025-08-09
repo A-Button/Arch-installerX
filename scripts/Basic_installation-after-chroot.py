@@ -124,6 +124,35 @@ class Arch_further_installer:
             print("There is something you need to visit: http://fars.ee/yGQq")
             os.system("grub-mkconfig -o /boot/grub/grub.cfg")
 
+    # Install DE
+    def install_de(self):
+        de_list = {
+            "KDE(Recommend)": "plasma-meta",
+            "budgie": "budgie",
+            "cinnamon": "cinnamon",
+            "cutefish": "cutefish",
+            "deepin": "deepin",
+            "enlightenment": "enlightenment",
+            "gnome": "gnome",
+            "lxge": "lxde-gtk3",
+            "lxqt": "lxqt",
+            "mate": "mate",
+            "ukui": "ukui",
+            "xfce": "xfce4",
+        }
+        print("Visit `http://fars.ee/mmfH` for preview")
+        for item in de_list.keys():
+            print(item)
+        de = input(
+            "Please input your de(if kde, just input `kde`), the name should be the SAME of printed: "
+        )
+        if de not in de_list.keys():
+            print("Please input the de name!!!")
+        elif de == "kde":
+            os.system(f"pacman -S {de_list['KDE(Recommend)']}")
+        else:
+            os.system(f"pacman -S {de_list[de]}")
+
 
 installer = Arch_further_installer()
 installer.add_repo()
@@ -136,3 +165,9 @@ installer.set_root_passwd()
 installer.set_time()
 installer.create_normal_user()
 installer.install_bootloader()
+
+desktop_type = input("Do you want to install de/wm? de/wm: ")
+if desktop_type == "de":
+    installer.install_de()
+elif desktop_type == "wm":
+    installer.install_wm()
