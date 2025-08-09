@@ -44,19 +44,23 @@ class Arch_further_installer:
     def add_repo(self):
         CN_repo_list = {
             "USTC": """[archlinuxcn]\nServer = https://mirrors.ustc.edu.cn/archlinuxcn/$arch""",
-            "Tsinghua": """[archlinuxcn]\nServer = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch\n""",
+            "Tsinghua/TUNA": """[archlinuxcn]\nServer = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch\n""",
+            "Ali_Cloud": """[archlinuxcn]\nServer = https://mirrors.aliyun.com/archlinuxcn/$arch\n""",
         }
-        print(CN_repo_list.keys())
-        confirm_CN_repo = input(
+        for item in CN_repo_list.keys():
+            print(item)
+        CN_repo_name = input(
             "Input your CN repo provider(They provide same contents, input the SAME of printed)"
         )
+        confirm_adding_CN_repo = input("Do you want to add CN repo? y/n: ")
         confirm_enable_32 = input("Do you want to enable 32-bit repo? y/n: ")
-        with open("/etc/pacman.conf", "a") as pacman_config:
-            pacman_config.write(CN_repo_list[confirm_CN_repo])
-            if confirm_enable_32 == "y":
-                pacman_config.write(
-                    """\n\n[multilib]\nInclude = /etc/pacman.d/mirrorlist\n"""
-                )
+        if confirm_adding_CN_repo == "y":
+            with open("/etc/pacman.conf", "a") as pacman_config:
+                pacman_config.write(CN_repo_list[CN_repo_name])
+                if confirm_enable_32 == "y":
+                    pacman_config.write(
+                        """\n\n[multilib]\nInclude = /etc/pacman.d/mirrorlist\n"""
+                    )
 
     def sync_data(self):
         # Update database
