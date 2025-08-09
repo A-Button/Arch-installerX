@@ -177,7 +177,6 @@ class Arch_further_installer:
                     "Please input your wm, the name should be the SAME of printed: "
                 )
 
-
 installer = Arch_further_installer()
 installer.add_repo()
 installer.change_mirror()
