@@ -9,11 +9,11 @@ class Arch_further_installer:
 
     def change_mirror(self):
         mirror_list = {
-            "TsingHua": "Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch",
+            "TsingHua/TUNA": "Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch",
             "USTC": "Server = https://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch",
             "LZU": "Server = https://mirrors.lzu.edu.cn/archlinux/$repo/os/$arch",
             "HuaWei_Cloud": "Server = https://mirrors.huaweicloud.com/archlinux/$repo/os/$arch",
-            "Ali_Cloud": "Server = http://mirrors.aliyun.com/archlinux/$repo/os/$arch",
+            "Ali_Cloud": "Server = https://mirrors.aliyun.com/archlinux/$repo/os/$arch",
         }
         for key in mirror_list.keys():
             print(key)
@@ -44,19 +44,23 @@ class Arch_further_installer:
     def add_repo(self):
         CN_repo_list = {
             "USTC": """[archlinuxcn]\nServer = https://mirrors.ustc.edu.cn/archlinuxcn/$arch""",
-            "Tsinghua": """[archlinuxcn]\nServer = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch\n""",
+            "Tsinghua/TUNA": """[archlinuxcn]\nServer = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch\n""",
+            "Ali_Cloud": """[archlinuxcn]\nServer = https://mirrors.aliyun.com/archlinuxcn/$arch\n""",
         }
-        print(CN_repo_list.keys())
-        confirm_CN_repo = input(
+        for item in CN_repo_list.keys():
+            print(item)
+        CN_repo_name = input(
             "Input your CN repo provider(They provide same contents, input the SAME of printed)"
         )
+        confirm_adding_CN_repo = input("Do you want to add CN repo? y/n: ")
         confirm_enable_32 = input("Do you want to enable 32-bit repo? y/n: ")
-        with open("/etc/pacman.conf", "a") as pacman_config:
-            pacman_config.write(CN_repo_list[confirm_CN_repo])
-            if confirm_enable_32 == "y":
-                pacman_config.write(
-                    """\n\n[multilib]\nInclude = /etc/pacman.d/mirrorlist\n"""
-                )
+        if confirm_adding_CN_repo == "y":
+            with open("/etc/pacman.conf", "a") as pacman_config:
+                pacman_config.write(CN_repo_list[CN_repo_name])
+                if confirm_enable_32 == "y":
+                    pacman_config.write(
+                        """\n\n[multilib]\nInclude = /etc/pacman.d/mirrorlist\n"""
+                    )
 
     def sync_data(self):
         # Update database
@@ -124,6 +128,54 @@ class Arch_further_installer:
             print("There is something you need to visit: http://fars.ee/yGQq")
             os.system("grub-mkconfig -o /boot/grub/grub.cfg")
 
+    # Install DE
+    def install_de(self):
+        de_list = {
+            "KDE(Recommend)": "plasma-meta",
+            "budgie": "budgie",
+            "cinnamon": "cinnamon",
+            "cutefish": "cutefish",
+            "deepin": "deepin",
+            "enlightenment": "enlightenment",
+            "gnome": "gnome",
+            "lxge": "lxde-gtk3",
+            "lxqt": "lxqt",
+            "mate": "mate",
+            "ukui": "ukui",
+            "xfce": "xfce4",
+        }
+        print("Visit `http://fars.ee/mmfH` for preview")
+        for item in de_list.keys():
+            print(item)
+        de = input(
+            "Please input your de(if kde, just input `kde`), the name should be the SAME of printed: "
+        )
+        if de not in de_list.keys():
+            print("Please input the de name!!!")
+        elif de == "kde":
+            os.system(f"pacman -S {de_list['KDE(Recommend)']}")
+        else:
+            os.system(f"pacman -S {de_list[de]}")
+
+    def install_wm(self):
+        wm_list = {
+            "dwm": "dwm",
+            "i3": "i3",
+            "bspwm": "bspwm",
+            "hyprland": "hyprland",
+            "sway": "sway",
+        }
+        for item in wm_list.keys():
+            print(item)
+        while True:
+            wm = input("Please input your wm, the name should be the SAME of printed: ")
+            if wm in wm_list.keys():
+                os.system(f"pacman -S {wm_list[wm]}")
+                break
+            else:
+                wm = input(
+                    "Please input your wm, the name should be the SAME of printed: "
+                )
 
 installer = Arch_further_installer()
 installer.add_repo()
@@ -136,3 +188,9 @@ installer.set_root_passwd()
 installer.set_time()
 installer.create_normal_user()
 installer.install_bootloader()
+
+desktop_type = input("Do you want to install de/wm? de/wm: ")
+if desktop_type == "de":
+    installer.install_de()
+elif desktop_type == "wm":
+    installer.install_wm()
