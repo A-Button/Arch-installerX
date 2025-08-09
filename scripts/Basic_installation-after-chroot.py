@@ -9,11 +9,11 @@ class Arch_further_installer:
 
     def change_mirror(self):
         mirror_list = {
-            "TsingHua": "Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch",
+            "TsingHua/TUNA": "Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch",
             "USTC": "Server = https://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch",
             "LZU": "Server = https://mirrors.lzu.edu.cn/archlinux/$repo/os/$arch",
             "HuaWei_Cloud": "Server = https://mirrors.huaweicloud.com/archlinux/$repo/os/$arch",
-            "Ali_Cloud": "Server = http://mirrors.aliyun.com/archlinux/$repo/os/$arch",
+            "Ali_Cloud": "Server = https://mirrors.aliyun.com/archlinux/$repo/os/$arch",
         }
         for key in mirror_list.keys():
             print(key)
